@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { Mic, Upload, X, AlertCircle, CheckCircle2, FileAudio } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import React, { useRef, useState } from "react";
+import { Mic, X, AlertCircle, FileAudio } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface AudioUploadProps {
   file: File | null;
@@ -25,7 +25,7 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       // Validate file type
-      if (!selectedFile.type.startsWith('audio/')) {
+      if (!selectedFile.type.startsWith("audio/")) {
         return;
       }
       onChange(selectedFile);
@@ -35,9 +35,9 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile && droppedFile.type.startsWith('audio/')) {
+    if (droppedFile && droppedFile.type.startsWith("audio/")) {
       onChange(droppedFile);
     }
   };
@@ -54,7 +54,7 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   const removeFile = () => {
     onChange(null);
     if (inputRef.current) {
-      inputRef.current.value = '';
+      inputRef.current.value = "";
     }
   };
 
@@ -65,10 +65,13 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
   };
 
   return (
-    <div className={cn('space-y-2', className)}>
+    <div className={cn("space-y-2", className)}>
       <label className="block text-sm font-medium text-foreground">
-        Call Recording {isRequired && <span className="text-destructive">*</span>}
-        {!isRequired && <span className="text-muted-foreground"> (Optional)</span>}
+        Call Recording{" "}
+        {isRequired && <span className="text-destructive">*</span>}
+        {!isRequired && (
+          <span className="text-muted-foreground"> (Optional)</span>
+        )}
       </label>
 
       {!file ? (
@@ -77,12 +80,12 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           className={cn(
-            'relative border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200',
+            "relative border-2 border-dashed rounded-lg p-6 text-center transition-colors duration-200",
             isDragging
-              ? 'border-primary bg-primary/5'
+              ? "border-primary bg-primary/5"
               : error
-              ? 'border-destructive bg-destructive/5'
-              : 'border-input hover:border-primary/50'
+              ? "border-destructive bg-destructive/5"
+              : "border-input hover:border-primary/50"
           )}
         >
           <input
@@ -93,14 +96,18 @@ export const AudioUpload: React.FC<AudioUploadProps> = ({
             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
           <div className="flex flex-col items-center gap-3">
-            <div className={cn(
-              'rounded-full p-3',
-              isDragging ? 'bg-primary/10' : 'bg-secondary'
-            )}>
-              <Mic className={cn(
-                'h-6 w-6',
-                isDragging ? 'text-primary' : 'text-muted-foreground'
-              )} />
+            <div
+              className={cn(
+                "rounded-full p-3",
+                isDragging ? "bg-primary/10" : "bg-secondary"
+              )}
+            >
+              <Mic
+                className={cn(
+                  "h-6 w-6",
+                  isDragging ? "text-primary" : "text-muted-foreground"
+                )}
+              />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground">

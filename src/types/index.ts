@@ -1,20 +1,72 @@
 export interface User {
   username: string;
   password: string;
-  role: 'caller' | 'admin';
+  role: "caller" | "admin";
 }
 
 export interface Lead {
   rowIndex: number;
-  niche: string;
-  country: string;
-  state: string;
-  mobile_number: string;
+
+  // Call workflow
   status: string;
   comment: string;
   caller_username: string;
   calling_date_time: string;
   call_recording_url: string;
+
+  // Query details
+  query_niche: string;
+  query_country: string;
+  query_state: string;
+  query_city: string;
+  query_area: string;
+  query_landmark: string;
+  query_pincode: string;
+  added_date_time: string;
+
+  // Identity
+  title: string;
+  name: string;
+  email: string;
+  phone: string;
+
+  // Web presence
+  clean_url: string;
+  website: string;
+  facebook: string;
+  instagram: string;
+  youtube: string;
+  tiktok: string;
+  twitter: string;
+  linkedin: string;
+  pinterest: string;
+  reddit: string;
+
+  // Business metadata
+  rating: string;
+  rating_count: string;
+  reviews: string;
+  type: string;
+  address: string;
+  latitude: string;
+  longitude: string;
+  price: string;
+
+  // Google data
+  place_id: string;
+  position: string;
+  data_id: string;
+  data_cid: string;
+  reviews_link: string;
+  photos_link: string;
+  gps_coordinates: string;
+  place_id_search: string;
+  types: string;
+  description: string;
+  hours: string;
+  operating_hours: string;
+  thumbnail: string;
+  book_online: string;
 }
 
 export interface CallFormData {
