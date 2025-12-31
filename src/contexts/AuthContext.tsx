@@ -1,15 +1,28 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
-import { User, AuthState } from '@/types';
-import { USERS } from '@/config/users';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useEffect,
+} from "react";
+import { User, AuthState } from "@/types";
+import { USERS } from "@/config/users";
 
 const AuthContext = createContext<AuthState | undefined>(undefined);
+
+const STORAGE_KEY = "callflow_user";
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  // ✅ Load user from localStorage on app start
+  const [user, setUser] = useState<User | null>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored ? JSON.parse(stored) : null;
+  });
 
   const login = useCallback((username: string, password: string): boolean => {
     const foundUser = USERS.find(
@@ -18,6 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (foundUser) {
       setUser(foundUser);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(foundUser));
       return true;
     }
     return false;
@@ -25,6 +39,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = useCallback(() => {
     setUser(null);
+    localStorage.removeItem(STORAGE_KEY);
   }, []);
 
   const value: AuthState = {
@@ -39,8 +54,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 export const useAuth = (): AuthState => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
