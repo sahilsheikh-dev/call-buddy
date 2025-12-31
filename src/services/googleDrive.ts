@@ -1,69 +1,61 @@
-import { GOOGLE_CONFIG, getAccessToken } from "@/config/google";
-import { TIMEOUTS } from "@/config/app";
+import { getDriveAccessToken } from "../services/googleAuth";
 
-const DRIVE_API_BASE = "https://www.googleapis.com/upload/drive/v3/files";
-
-/**
- * Generate filename for audio recording
- * Format: <mobile_number>-<YYYYMMDD-HHmmss>.mp3
- */
-export const generateAudioFilename = (mobileNumber: string): string => {
-  const now = new Date();
-  const dateStr = now
-    .toISOString()
-    .replace(/[-:]/g, "")
-    .replace("T", "-")
-    .slice(0, 15);
-
-  // Clean mobile number (remove special chars)
-  const cleanNumber = mobileNumber.replace(/[^0-9+]/g, "");
-
-  return `${cleanNumber}-${dateStr}.mp3`;
-};
-
-/**
- * Upload audio file to Google Drive
- * Returns the shareable URL of the uploaded file
- */
 export const uploadToDrive = async (
   file: File,
   mobileNumber: string
 ): Promise<string> => {
-  const base64 = await fileToBase64(file);
+  const accessToken = await getDriveAccessToken();
+
+  const cleanMobile = mobileNumber.replace(/\D/g, "");
+  const timestamp = new Date()
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace("T", "_")
+    .slice(0, 15);
+
+  const fileName = `${cleanMobile}_${timestamp}.mp3`;
+
+  const metadata = {
+    name: fileName,
+    parents: [import.meta.env.VITE_GOOGLE_DRIVE_FOLDER_ID],
+  };
+
+  const form = new FormData();
+  form.append(
+    "metadata",
+    new Blob([JSON.stringify(metadata)], { type: "application/json" })
+  );
+  form.append("file", file);
 
   const res = await fetch(
-    `https://script.google.com/macros/s/${
-      import.meta.env.VITE_SHEET_WEBHOOK_DEPLOYMENT_ID
-    }/exec`,
+    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink",
     {
       method: "POST",
       headers: {
-        // IMPORTANT: text/plain prevents CORS preflight
-        "Content-Type": "text/plain;charset=utf-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: form,
+    }
+  );
+
+  if (!res.ok) throw new Error(await res.text());
+
+  const json = await res.json();
+
+  await fetch(
+    `https://www.googleapis.com/drive/v3/files/${json.id}/permissions`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        action: "uploadAudio",
-        mobileNumber,
-        mimeType: file.type,
-        data: base64,
+        role: "reader",
+        type: "anyone",
       }),
     }
   );
 
-  const text = await res.text();
-  const json = JSON.parse(text);
-
-  if (!json.success) {
-    throw new Error(json.error || "Upload failed");
-  }
-
-  return json.url;
+  return json.webViewLink;
 };
-
-const fileToBase64 = (file: File): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve((reader.result as string).split(",")[1]);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });

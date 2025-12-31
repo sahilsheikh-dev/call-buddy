@@ -132,7 +132,8 @@ export const updateSheetRow = async (
         status,
         comment,
         callerUsername,
-        recordingUrl,
+        recordingUrl:
+          recordingUrl && recordingUrl.trim() !== "" ? recordingUrl : "NA",
       }),
       redirect: "follow",
     }
