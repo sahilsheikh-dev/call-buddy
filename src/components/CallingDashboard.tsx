@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Header } from './Header';
-import { LeadCard } from './LeadCard';
-import { CallForm } from './CallForm';
-import { LoadingSpinner } from './LoadingSpinner';
-import { ErrorMessage } from './ErrorMessage';
-import { NoLeadsAvailable } from './NoLeadsAvailable';
-import { useAuth } from '@/contexts/AuthContext';
-import { useLeads } from '@/hooks/useLeads';
-import { useGoogleDriveUpload } from '@/hooks/useGoogleDriveUpload';
-import { CallFormData } from '@/types';
-import { toast } from '@/hooks/use-toast';
+import React, { useEffect, useState } from "react";
+import { Header } from "./Header";
+import { LeadCard } from "./LeadCard";
+import { CallForm } from "./CallForm";
+import { LoadingSpinner } from "./LoadingSpinner";
+import { ErrorMessage } from "./ErrorMessage";
+import { NoLeadsAvailable } from "./NoLeadsAvailable";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLeads } from "@/hooks/useLeads";
+import { useGoogleDriveUpload } from "@/hooks/useGoogleDriveUpload";
+import { CallFormData } from "@/types";
+import { toast } from "@/hooks/use-toast";
 
 export const CallingDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -35,17 +35,20 @@ export const CallingDashboard: React.FC = () => {
     setIsSaving(true);
 
     try {
-      let recordingUrl = '';
+      let recordingUrl: string | null = null;
 
       // Upload audio if provided
       if (data.audioFile) {
         try {
-          recordingUrl = await uploadFile(data.audioFile, currentLead.mobile_number);
+          recordingUrl = await uploadFile(data.audioFile, currentLead.phone);
         } catch (uploadError) {
           toast({
-            title: 'Upload Failed',
-            description: uploadError instanceof Error ? uploadError.message : 'Failed to upload audio',
-            variant: 'destructive',
+            title: "Upload Failed",
+            description:
+              uploadError instanceof Error
+                ? uploadError.message
+                : "Failed to upload audio",
+            variant: "destructive",
           });
           setIsSaving(false);
           return;
@@ -53,17 +56,25 @@ export const CallingDashboard: React.FC = () => {
       }
 
       // Save lead data
-      await saveLead(data.status, data.comment, user.username, recordingUrl);
+      await saveLead(
+        data.status ?? "NA",
+        data.comment ?? "NA",
+        user.username ?? "NA",
+        recordingUrl ?? null
+      );
 
       toast({
-        title: 'Lead Saved',
-        description: 'Moving to next lead...',
+        title: "Lead Saved",
+        description: "Moving to next lead...",
       });
     } catch (saveError) {
       toast({
-        title: 'Save Failed',
-        description: saveError instanceof Error ? saveError.message : 'Failed to save lead',
-        variant: 'destructive',
+        title: "Save Failed",
+        description:
+          saveError instanceof Error
+            ? saveError.message
+            : "Failed to save lead",
+        variant: "destructive",
       });
     } finally {
       setIsSaving(false);
@@ -102,15 +113,12 @@ export const CallingDashboard: React.FC = () => {
         {currentLead && (
           <>
             <LeadCard lead={currentLead} />
-            
+
             <div className="bg-card rounded-xl card-shadow p-5">
               <h2 className="text-lg font-semibold text-foreground mb-4">
                 Call Outcome
               </h2>
-              <CallForm
-                onSubmit={handleSubmit}
-                isSubmitting={isProcessing}
-              />
+              <CallForm onSubmit={handleSubmit} isSubmitting={isProcessing} />
             </div>
           </>
         )}
@@ -123,10 +131,10 @@ export const CallingDashboard: React.FC = () => {
                 size="lg"
                 text={
                   isUploading
-                    ? 'Uploading recording...'
+                    ? "Uploading recording..."
                     : isSaving
-                    ? 'Saving lead...'
-                    : 'Processing...'
+                    ? "Saving lead..."
+                    : "Processing..."
                 }
               />
             </div>
