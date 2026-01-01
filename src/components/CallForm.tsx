@@ -1,12 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { Save, Loader2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { StatusSelect } from './StatusSelect';
-import { AudioUpload } from './AudioUpload';
-import { isAudioRequired } from '@/config/statusRules';
-import { CallFormData } from '@/types';
-import { cn } from '@/lib/utils';
+import React, { useState, useCallback, useEffect } from "react";
+import { Save, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { StatusSelect } from "./StatusSelect";
+import { AudioUpload } from "./AudioUpload";
+import { isAudioRequired } from "@/config/statusRules";
+import { CallFormData } from "@/types";
+import { cn } from "@/lib/utils";
 
 interface CallFormProps {
   onSubmit: (data: CallFormData) => Promise<void>;
@@ -25,8 +25,8 @@ export const CallForm: React.FC<CallFormProps> = ({
   isSubmitting,
   className,
 }) => {
-  const [status, setStatus] = useState('');
-  const [comment, setComment] = useState('');
+  const [status, setStatus] = useState("");
+  const [comment, setComment] = useState("");
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -38,17 +38,17 @@ export const CallForm: React.FC<CallFormProps> = ({
     const newErrors: FormErrors = {};
 
     if (!status) {
-      newErrors.status = 'Please select a call status';
+      newErrors.status = "Please select a call status";
     }
 
     if (!comment.trim()) {
-      newErrors.comment = 'Please enter a comment';
+      newErrors.comment = "Please enter a comment";
     } else if (comment.trim().length < 3) {
-      newErrors.comment = 'Comment must be at least 3 characters';
+      newErrors.comment = "Comment must be at least 3 characters";
     }
 
     if (audioRequired && !audioFile) {
-      newErrors.audioFile = 'Audio recording is required for this status';
+      newErrors.audioFile = "Audio recording is required for this status";
     }
 
     return newErrors;
@@ -63,10 +63,10 @@ export const CallForm: React.FC<CallFormProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Mark all fields as touched
     setTouched({ status: true, comment: true, audioFile: true });
-    
+
     const formErrors = validate();
     setErrors(formErrors);
 
@@ -75,20 +75,21 @@ export const CallForm: React.FC<CallFormProps> = ({
     }
 
     await onSubmit({ status, comment, audioFile });
-    
+
     // Reset form after successful submission
-    setStatus('');
-    setComment('');
+    setStatus("");
+    setComment("");
     setAudioFile(null);
     setErrors({});
     setTouched({});
   };
 
   const isValid = !errors.status && !errors.comment && !errors.audioFile;
-  const canSubmit = status && comment.trim() && (audioRequired ? audioFile : true);
+  const canSubmit =
+    status && comment.trim() && (audioRequired ? audioFile : true);
 
   return (
-    <form onSubmit={handleSubmit} className={cn('space-y-5', className)}>
+    <form onSubmit={handleSubmit} className={cn("space-y-5", className)}>
       <StatusSelect
         value={status}
         onChange={(value) => {
@@ -110,12 +111,16 @@ export const CallForm: React.FC<CallFormProps> = ({
           }}
           placeholder="Enter call notes and observations..."
           className={cn(
-            'min-h-[100px] resize-none text-base',
-            touched.comment && errors.comment && 'border-destructive focus-visible:ring-destructive'
+            "min-h-[100px] resize-none text-base",
+            touched.comment &&
+              errors.comment &&
+              "border-destructive focus-visible:ring-destructive"
           )}
         />
         {touched.comment && errors.comment && (
-          <p className="text-sm text-destructive animate-fade-in">{errors.comment}</p>
+          <p className="text-sm text-destructive animate-fade-in">
+            {errors.comment}
+          </p>
         )}
       </div>
 

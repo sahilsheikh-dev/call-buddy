@@ -1,11 +1,11 @@
-import { AppConfig } from '@/types';
+import { AppConfig } from "@/types";
 
 /**
  * Application configuration
  */
 export const APP_CONFIG: AppConfig = {
-  appName: 'CallFlow CRM',
-  version: '1.0.0',
+  appName: "Call Buddy",
+  version: "1.0.0",
 };
 
 /**

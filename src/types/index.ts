@@ -32,7 +32,6 @@ export interface Lead {
 
   // Web presence
   clean_url: string;
-  website: string;
   facebook: string;
   instagram: string;
   youtube: string;
@@ -50,23 +49,22 @@ export interface Lead {
   address: string;
   latitude: string;
   longitude: string;
-  price: string;
 
   // Google data
   place_id: string;
-  position: string;
-  data_id: string;
-  data_cid: string;
+  google_maps_url: string;
   reviews_link: string;
   photos_link: string;
   gps_coordinates: string;
-  place_id_search: string;
   types: string;
   description: string;
   hours: string;
   operating_hours: string;
   thumbnail: string;
   book_online: string;
+  website_status: string;
+  website_fetch_status: string;
+  enrichment_status: string;
 }
 
 export interface CallFormData {
