@@ -42,12 +42,14 @@ export const fetchSheetData = async (): Promise<Lead[]> => {
     return rows.slice(1).map((row, index) => ({
       rowIndex: index + 2,
 
+      // Call workflow
       status: row[0] || "",
-      call_recording_url: row[1] || "",
-      comment: row[2] || "",
-      caller_username: row[3] || "",
-      calling_date_time: row[4] || "",
+      comment: row[1] || "",
+      caller_username: row[2] || "",
+      calling_date_time: row[3] || "",
+      call_recording_url: row[4] || "",
 
+      // Query details
       query_niche: row[5] || "",
       query_country: row[6] || "",
       query_state: row[7] || "",
@@ -57,45 +59,49 @@ export const fetchSheetData = async (): Promise<Lead[]> => {
       query_pincode: row[11] || "",
       added_date_time: row[12] || "",
 
+      // Identity
       title: row[13] || "",
-      email: row[14] || "",
-      name: row[15] || "",
+      name: row[14] || "",
+      email: row[15] || "",
       phone: row[16] || "",
 
+      // Social / web
       clean_url: row[17] || "",
-      website: row[18] || "",
-      facebook: row[19] || "",
-      instagram: row[20] || "",
-      youtube: row[21] || "",
-      tiktok: row[22] || "",
-      twitter: row[23] || "",
-      linkedin: row[24] || "",
-      pinterest: row[25] || "",
-      reddit: row[26] || "",
+      facebook: row[18] || "",
+      instagram: row[19] || "",
+      youtube: row[20] || "",
+      tiktok: row[21] || "",
+      twitter: row[22] || "",
+      linkedin: row[23] || "",
+      pinterest: row[24] || "",
+      reddit: row[25] || "",
 
-      rating: row[27] || "",
-      rating_count: row[28] || "",
-      reviews: row[29] || "",
-      type: row[30] || "",
+      // Business metadata
+      rating: row[26] || "",
+      rating_count: row[27] || "",
+      reviews: row[28] || "",
+      type: row[29] || "",
+      types: row[30] || "",
       address: row[31] || "",
       latitude: row[32] || "",
       longitude: row[33] || "",
-      price: row[34] || "",
 
-      place_id: row[35] || "",
-      position: row[36] || "",
-      data_id: row[37] || "",
-      data_cid: row[38] || "",
-      reviews_link: row[39] || "",
-      photos_link: row[40] || "",
-      gps_coordinates: row[41] || "",
-      place_id_search: row[42] || "",
-      types: row[43] || "",
-      description: row[44] || "",
-      hours: row[45] || "",
-      operating_hours: row[46] || "",
-      thumbnail: row[47] || "",
-      book_online: row[48] || "",
+      // Google data
+      place_id: row[34] || "",
+      google_maps_url: row[35] || "",
+      reviews_link: row[36] || "",
+      photos_link: row[37] || "",
+      gps_coordinates: row[38] || "",
+      description: row[39] || "",
+      hours: row[40] || "",
+      operating_hours: row[41] || "",
+      thumbnail: row[42] || "",
+      book_online: row[43] || "",
+
+      // Status flags
+      website_status: row[44] || "",
+      website_fetch_status: row[45] || "",
+      enrichment_status: row[46] || "",
     }));
   } catch (error) {
     clearTimeout(timeoutId);
