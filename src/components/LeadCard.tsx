@@ -2,7 +2,6 @@ import React from "react";
 import {
   Phone,
   Globe,
-  MapPin,
   Star,
   ExternalLink,
   Clock,
@@ -58,7 +57,7 @@ const Section = ({
   icon: any;
   children: React.ReactNode;
 }) => (
-  <section className="space-y-4">
+  <section className="space-y-4 rounded-md shadow-md p-5">
     <h3 className="flex items-center gap-2 font-semibold text-base">
       <Icon className="h-4 w-4" />
       {title}
@@ -147,21 +146,30 @@ const RatingBlock = ({ rating, count }: { rating: string; count: string }) => {
 
 const ReviewsBlock = ({ value }: { value: string }) => {
   const parsed = safeJSON(value);
-  if (!Array.isArray(parsed)) return <span>{NA}</span>;
+  if (!Array.isArray(parsed) || parsed.length === 0) return <span>{NA}</span>;
 
   return (
-    <div className="space-y-3">
-      {parsed.slice(0, 3).map((r, i) => (
-        <div key={i} className="border rounded-md p-3 space-y-1">
-          <div className="flex items-center gap-2 text-sm">
-            <Star className="h-3 w-3 text-yellow-500" />
+    <div
+      className="
+        grid gap-4
+        grid-cols-1
+        md:grid-cols-3
+        lg:grid-cols-4
+      "
+    >
+      {parsed.slice(0, 4).map((r, i) => (
+        <div key={i} className="border rounded-lg p-3 flex flex-col">
+          <div className="flex items-center gap-2 text-sm mb-1">
+            <Star className="h-3 w-3 text-yellow-500 shrink-0" />
             <span className="font-semibold">{r.rating}</span>
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground text-xs">
               {r.relative_time_description}
             </span>
           </div>
-          <div className="text-xs font-medium">{r.author_name}</div>
-          <div className="text-sm text-muted-foreground">{r.text}</div>
+
+          <div className="text-xs font-medium mb-1">{r.author_name || NA}</div>
+
+          <div className="text-sm text-muted-foreground">{r.text || NA}</div>
         </div>
       ))}
     </div>
@@ -237,61 +245,119 @@ export const LeadCard: React.FC<{
         />
       </Section>
 
+      <div
+        className="
+      grid gap-4
+      grid-cols-1
+      sm:grid-cols-2
+    "
+      >
+        {/* HOURS */}
+        <Section title="Operating Hours" icon={Clock}>
+          <HoursBlock value={lead.hours || lead.operating_hours} />
+        </Section>
+
+        {/* ONLINE */}
+        <Section title="Online Presence" icon={Globe}>
+          <div
+            className="
+      grid gap-4
+      grid-cols-1
+      sm:grid-cols-2
+    "
+          >
+            <DataBlock
+              label="Website"
+              value={<LinkBlock url={lead.clean_url} />}
+            />
+            <DataBlock
+              label="Facebook"
+              value={<LinkBlock url={lead.facebook} />}
+            />
+            <DataBlock
+              label="Instagram"
+              value={<LinkBlock url={lead.instagram} />}
+            />
+            <DataBlock
+              label="YouTube"
+              value={<LinkBlock url={lead.youtube} />}
+            />
+            <DataBlock
+              label="Twitter"
+              value={<LinkBlock url={lead.twitter} />}
+            />
+            <DataBlock
+              label="LinkedIn"
+              value={<LinkBlock url={lead.linkedin} />}
+            />
+            <DataBlock
+              label="Pinterest"
+              value={<LinkBlock url={lead.pinterest} />}
+            />
+            <DataBlock label="Reddit" value={<LinkBlock url={lead.reddit} />} />
+          </div>
+        </Section>
+      </div>
+
       {/* RATINGS */}
       <Section title="Ratings & Reviews" icon={Star}>
         <RatingBlock rating={lead.rating} count={lead.rating_count} />
         <ReviewsBlock value={lead.reviews} />
       </Section>
 
-      {/* HOURS */}
-      <Section title="Operating Hours" icon={Clock}>
-        <HoursBlock value={lead.hours || lead.operating_hours} />
-      </Section>
+      <div
+        className="
+      grid gap-4
+      grid-cols-1
+      sm:grid-cols-2
+    "
+      >
+        {/* QUERY */}
+        <Section title="Query Metadata" icon={Database}>
+          <div
+            className="
+      grid gap-4
+      grid-cols-1
+      sm:grid-cols-2
+    "
+          >
+            <DataBlock label="Niche" value={lead.query_niche} />
+            <DataBlock label="Country" value={lead.query_country} />
+            <DataBlock label="State" value={lead.query_state} />
+            <DataBlock label="City" value={lead.query_city} />
+            <DataBlock label="Area" value={lead.query_area} />
+            <DataBlock label="Landmark" value={lead.query_landmark} />
+            <DataBlock label="Pincode" value={lead.query_pincode} />
+            <DataBlock label="Added At" value={lead.added_date_time} />
+          </div>
+        </Section>
 
-      {/* ONLINE */}
-      <Section title="Online Presence" icon={Globe}>
-        <DataBlock label="Website" value={<LinkBlock url={lead.clean_url} />} />
-        <DataBlock label="Facebook" value={<LinkBlock url={lead.facebook} />} />
-        <DataBlock
-          label="Instagram"
-          value={<LinkBlock url={lead.instagram} />}
-        />
-        <DataBlock label="YouTube" value={<LinkBlock url={lead.youtube} />} />
-        <DataBlock label="Twitter" value={<LinkBlock url={lead.twitter} />} />
-        <DataBlock label="LinkedIn" value={<LinkBlock url={lead.linkedin} />} />
-        <DataBlock
-          label="Pinterest"
-          value={<LinkBlock url={lead.pinterest} />}
-        />
-        <DataBlock label="Reddit" value={<LinkBlock url={lead.reddit} />} />
-      </Section>
-
-      {/* QUERY */}
-      <Section title="Query Metadata" icon={Database}>
-        <DataBlock label="Niche" value={lead.query_niche} />
-        <DataBlock label="Country" value={lead.query_country} />
-        <DataBlock label="State" value={lead.query_state} />
-        <DataBlock label="City" value={lead.query_city} />
-        <DataBlock label="Area" value={lead.query_area} />
-        <DataBlock label="Landmark" value={lead.query_landmark} />
-        <DataBlock label="Pincode" value={lead.query_pincode} />
-        <DataBlock label="Added At" value={lead.added_date_time} />
-      </Section>
-
-      {/* SYSTEM */}
-      <Section title="System Status" icon={FileText}>
-        <DataBlock label="Website Status" value={lead.website_status} />
-        <DataBlock label="Fetch Status" value={lead.website_fetch_status} />
-        <DataBlock label="Enrichment Status" value={lead.enrichment_status} />
-        <DataBlock label="Caller" value={lead.caller_username} />
-        <DataBlock label="Call Time" value={lead.calling_date_time} />
-        <DataBlock
-          label="Recording"
-          value={<LinkBlock url={lead.call_recording_url} />}
-        />
-        <DataBlock label="Status" value={lead.status} />
-        <DataBlock label="Comments" value={lead.comment} />
-      </Section>
+        {/* SYSTEM */}
+        <Section title="System Status" icon={FileText}>
+          <div
+            className="
+      grid gap-4
+      grid-cols-1
+      sm:grid-cols-2
+    "
+          >
+            <DataBlock label="Website Status" value={lead.website_status} />
+            <DataBlock label="Fetch Status" value={lead.website_fetch_status} />
+            <DataBlock
+              label="Enrichment Status"
+              value={lead.enrichment_status}
+            />
+            <DataBlock label="Caller" value={lead.caller_username} />
+            <DataBlock label="Call Time" value={lead.calling_date_time} />
+            <DataBlock
+              label="Recording"
+              value={<LinkBlock url={lead.call_recording_url} />}
+            />
+            <DataBlock label="Status" value={lead.status} />
+            <DataBlock label="Comments" value={lead.comment} />
+          </div>
+        </Section>
+      </div>
     </div>
   );
 };
