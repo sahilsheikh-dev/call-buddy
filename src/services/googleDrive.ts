@@ -48,7 +48,6 @@ export const uploadToDrive = async (
       method: "POST",
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         role: "reader",

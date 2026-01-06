@@ -132,9 +132,6 @@ export const updateSheetRow = async (
     }/exec`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
       body: JSON.stringify({
         rowIndex,
         status,
