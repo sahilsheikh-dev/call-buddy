@@ -60,7 +60,8 @@ export const CallingDashboard: React.FC = () => {
         data.status ?? "NA",
         data.comment ?? "NA",
         user.username ?? "NA",
-        recordingUrl ?? null
+        recordingUrl ?? null,
+        data.recordingLength ?? "NA"
       );
 
       toast({

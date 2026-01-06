@@ -17,7 +17,8 @@ interface UseLeadsReturn {
     status: string,
     comment: string,
     callerUsername: string,
-    recordingUrl: string | null
+    recordingUrl: string | null,
+    recordingLength: string
   ) => Promise<void>;
   clearError: () => void;
 }
@@ -53,7 +54,8 @@ export const useLeads = (): UseLeadsReturn => {
       status: string,
       comment: string,
       callerUsername: string,
-      recordingUrl: string
+      recordingUrl: string,
+      recordingLength: string
     ) => {
       if (!currentLead) {
         throw new Error("No lead selected");
@@ -68,7 +70,8 @@ export const useLeads = (): UseLeadsReturn => {
           status,
           comment,
           callerUsername,
-          recordingUrl
+          recordingUrl,
+          recordingLength
         );
 
         // Update local state
@@ -80,6 +83,7 @@ export const useLeads = (): UseLeadsReturn => {
                 comment,
                 caller_username: callerUsername,
                 call_recording_url: recordingUrl,
+                call_recording_length: recordingLength,
               }
             : lead
         );

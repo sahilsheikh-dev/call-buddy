@@ -48,60 +48,61 @@ export const fetchSheetData = async (): Promise<Lead[]> => {
       caller_username: row[2] || "",
       calling_date_time: row[3] || "",
       call_recording_url: row[4] || "",
+      call_recording_length: row[5] || "",
 
       // Query details
-      query_niche: row[5] || "",
-      query_country: row[6] || "",
-      query_state: row[7] || "",
-      query_city: row[8] || "",
-      query_area: row[9] || "",
-      query_landmark: row[10] || "",
-      query_pincode: row[11] || "",
-      added_date_time: row[12] || "",
+      query_niche: row[6] || "",
+      query_country: row[7] || "",
+      query_state: row[8] || "",
+      query_city: row[9] || "",
+      query_area: row[10] || "",
+      query_landmark: row[11] || "",
+      query_pincode: row[12] || "",
+      added_date_time: row[13] || "",
 
       // Identity
-      title: row[13] || "",
-      name: row[14] || "",
-      email: row[15] || "",
-      phone: row[16] || "",
+      title: row[14] || "",
+      name: row[15] || "",
+      email: row[16] || "",
+      phone: row[17] || "",
 
       // Social / web
-      clean_url: row[17] || "",
-      facebook: row[18] || "",
-      instagram: row[19] || "",
-      youtube: row[20] || "",
-      tiktok: row[21] || "",
-      twitter: row[22] || "",
-      linkedin: row[23] || "",
-      pinterest: row[24] || "",
-      reddit: row[25] || "",
+      clean_url: row[18] || "",
+      facebook: row[19] || "",
+      instagram: row[20] || "",
+      youtube: row[21] || "",
+      tiktok: row[22] || "",
+      twitter: row[23] || "",
+      linkedin: row[24] || "",
+      pinterest: row[25] || "",
+      reddit: row[26] || "",
 
       // Business metadata
-      rating: row[26] || "",
-      rating_count: row[27] || "",
-      reviews: row[28] || "",
-      type: row[29] || "",
-      types: row[30] || "",
-      address: row[31] || "",
-      latitude: row[32] || "",
-      longitude: row[33] || "",
+      rating: row[27] || "",
+      rating_count: row[28] || "",
+      reviews: row[29] || "",
+      type: row[30] || "",
+      types: row[31] || "",
+      address: row[32] || "",
+      latitude: row[33] || "",
+      longitude: row[34] || "",
 
       // Google data
-      place_id: row[34] || "",
-      google_maps_url: row[35] || "",
-      reviews_link: row[36] || "",
-      photos_link: row[37] || "",
-      gps_coordinates: row[38] || "",
-      description: row[39] || "",
-      hours: row[40] || "",
-      operating_hours: row[41] || "",
-      thumbnail: row[42] || "",
-      book_online: row[43] || "",
+      place_id: row[35] || "",
+      google_maps_url: row[36] || "",
+      reviews_link: row[37] || "",
+      photos_link: row[38] || "",
+      gps_coordinates: row[39] || "",
+      description: row[40] || "",
+      hours: row[41] || "",
+      operating_hours: row[42] || "",
+      thumbnail: row[43] || "",
+      book_online: row[44] || "",
 
       // Status flags
-      website_status: row[44] || "",
-      website_fetch_status: row[45] || "",
-      enrichment_status: row[46] || "",
+      website_status: row[45] || "",
+      website_fetch_status: row[46] || "",
+      enrichment_status: row[47] || "",
     }));
   } catch (error) {
     clearTimeout(timeoutId);
@@ -122,7 +123,8 @@ export const updateSheetRow = async (
   status: string,
   comment: string,
   callerUsername: string,
-  recordingUrl: string | null
+  recordingUrl: string | null,
+  recordingLength: string
 ): Promise<void> => {
   const response = await fetch(
     `https://script.google.com/macros/s/${
@@ -140,6 +142,7 @@ export const updateSheetRow = async (
         callerUsername,
         recordingUrl:
           recordingUrl && recordingUrl.trim() !== "" ? recordingUrl : "NA",
+        recordingLength,
       }),
       redirect: "follow",
     }

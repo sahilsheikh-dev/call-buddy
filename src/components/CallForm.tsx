@@ -7,6 +7,7 @@ import { AudioUpload } from "./AudioUpload";
 import { isAudioRequired } from "@/config/statusRules";
 import { CallFormData } from "@/types";
 import { cn } from "@/lib/utils";
+import { formatSecondsToHMS } from "@/utils/time";
 
 interface CallFormProps {
   onSubmit: (data: CallFormData) => Promise<void>;
@@ -74,7 +75,32 @@ export const CallForm: React.FC<CallFormProps> = ({
       return;
     }
 
-    await onSubmit({ status, comment, audioFile });
+    const getAudioDuration = (file: File): Promise<string> =>
+      new Promise((resolve, reject) => {
+        const audio = document.createElement("audio");
+        audio.preload = "metadata";
+        audio.src = URL.createObjectURL(file);
+
+        audio.onloadedmetadata = () => {
+          URL.revokeObjectURL(audio.src);
+          resolve(formatSecondsToHMS(audio.duration));
+        };
+
+        audio.onerror = () => reject("Failed to read audio duration");
+      });
+
+    let recordingLength = "00:00:00";
+
+    if (audioFile) {
+      recordingLength = await getAudioDuration(audioFile);
+    }
+
+    await onSubmit({
+      status,
+      comment,
+      audioFile,
+      recordingLength,
+    });
 
     // Reset form after successful submission
     setStatus("");
