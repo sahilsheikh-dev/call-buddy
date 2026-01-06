@@ -13,6 +13,7 @@ export interface Lead {
   caller_username: string;
   calling_date_time: string;
   call_recording_url: string;
+  call_recording_length: string;
 
   // Query details
   query_niche: string;
@@ -71,6 +72,7 @@ export interface CallFormData {
   status: string;
   comment: string;
   audioFile: File | null;
+  recordingLength: string | null; // HH:MM:SS
 }
 
 export interface GoogleConfig {
