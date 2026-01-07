@@ -3,19 +3,35 @@
  * These are the possible statuses a caller can assign to a lead
  */
 export const CALL_STATUSES = [
-  "interested",
-  "not interested",
-  "callback requested",
-  "voicemail left",
-  "no answer",
-  "busy tone",
-  "disconnected number",
-  "wrong number",
-  "repeat number",
-  "blank call",
-  "do not call",
-  "sale made",
-  "appointment set",
+  "Abusive",
+  "Already have a Website",
+  "Answering Machine (Sent to Message)",
+  "Appointment Set",
+  "Blank Call (No Response)",
+  "Busy Tone",
+  "Call Back",
+  "Callback Requested",
+  "Concerned Person Not Available",
+  "Customer Busy",
+  "Customer Hung Up",
+  "Disconnected Number",
+  "Do Not Call",
+  "Follow Up",
+  "Hard Reject",
+  "In Future",
+  "Incomplete",
+  "Interested",
+  "My Call Back",
+  "No Answer",
+  "Not Eligible",
+  "Not Interested",
+  "Receptionist",
+  "Repeated Number",
+  "Robot / Automated",
+  "Sale Made",
+  "Voicemail Left",
+  "Vulnerable Customer",
+  "Wrong Number",
 ] as const;
 
 export type CallStatus = (typeof CALL_STATUSES)[number];
@@ -25,12 +41,14 @@ export type CallStatus = (typeof CALL_STATUSES)[number];
  * For these statuses, the audio file is optional
  */
 export const OPTIONAL_AUDIO_STATUSES: string[] = [
-  "repeat number",
-  "blank call",
-  "busy tone",
-  "disconnected number",
-  "no answer",
-  "wrong number",
+  "Blank Call (No Response)",
+  "Busy Tone",
+  "Disconnected Number",
+  "No Answer",
+  "Wrong Number",
+  "Repeated Number",
+  "Robot / Automated",
+  "Answering Machine (Sent to Message)",
 ];
 
 /**
@@ -44,17 +62,38 @@ export const isAudioRequired = (status: string): boolean => {
  * Status color mapping for visual feedback
  */
 export const STATUS_COLORS: Record<string, string> = {
-  interested: "success",
-  "sale made": "success",
-  "appointment set": "success",
-  "callback requested": "info",
-  "voicemail left": "info",
-  "not interested": "muted",
-  "do not call": "destructive",
-  "no answer": "warning",
-  "busy tone": "warning",
-  "disconnected number": "muted",
-  "wrong number": "muted",
-  "repeat number": "muted",
-  "blank call": "muted",
+  Interested: "success",
+  "Sale Made": "success",
+  "Appointment Set": "success",
+
+  "Call Back": "info",
+  "Callback Requested": "info",
+  "My Call Back": "info",
+  "Voicemail Left": "info",
+  "Follow Up": "info",
+
+  "Not Interested": "muted",
+  "Hard Reject": "destructive",
+  "Do Not Call": "destructive",
+  Abusive: "destructive",
+  "Vulnerable Customer": "destructive",
+
+  "No Answer": "warning",
+  "Busy Tone": "warning",
+  "Customer Busy": "warning",
+
+  "Disconnected Number": "muted",
+  "Wrong Number": "muted",
+  "Repeated Number": "muted",
+  "Blank Call (No Response)": "muted",
+  "Robot / Automated": "muted",
+  "Answering Machine (Sent to Message)": "muted",
+
+  "Concerned Person Not Available": "muted",
+  "Customer Hung Up": "muted",
+  Receptionist: "muted",
+  "Already have a Website": "muted",
+  "Not Eligible": "muted",
+  Incomplete: "muted",
+  "In Future": "muted",
 };
